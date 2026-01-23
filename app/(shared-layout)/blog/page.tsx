@@ -14,6 +14,8 @@ export const metadata: Metadata = {
   authors: [{ name: "Mostafa Mohamed" }],
 };
 
+export const dynamic = "force-dynamic";
+
 export default function BlogRoute() {
   return (
     <div className="py-12">
