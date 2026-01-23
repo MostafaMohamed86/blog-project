@@ -11,7 +11,7 @@ const nextConfig: NextConfig = {
         port: "",
       },
       {
-        hostname: "exuberant-caiman-398.convex.cloud",
+        hostname: "pastel-toad-746.convex.cloud",
         protocol: "https",
         port: "",
       },
