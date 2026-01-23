@@ -15,6 +15,11 @@ const nextConfig: NextConfig = {
         protocol: "https",
         port: "",
       },
+      {
+        hostname: "exuberant-caiman-398.convex.cloud",
+        protocol: "https",
+        port: "",
+      },
     ],
   },
 };
