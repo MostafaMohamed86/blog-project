@@ -1,13 +1,11 @@
 import { buttonVariants } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
-import { Skeleton } from "@/components/ui/skeleton";
 import { api } from "@/convex/_generated/api";
 import { fetchQuery } from "convex/nextjs";
 import { Metadata } from "next";
-import { cacheLife, cacheTag } from "next/cache";
 import Image from "next/image";
 import Link from "next/link";
-import { Suspense } from "react";
+import { connection } from "next/server";
 
 export const metadata: Metadata = {
   title: "Blog | NextJs",
@@ -35,9 +33,10 @@ export default function BlogRoute() {
 }
 
 async function LoadBlogList() {
-  "use cache";
-  cacheLife("hours");
-  cacheTag("blog");
+  // "use cache";
+  // cacheLife("hours");
+  // cacheTag("blog");
+  await connection();
   const data = await fetchQuery(api.posts.getPosts);
 
   return (
@@ -79,19 +78,3 @@ async function LoadBlogList() {
   );
 }
 
-function SkeletonLoadingUi() {
-  return (
-    <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-      {[...Array(4)].map((_, i) => (
-        <div className="flex flex-col space-y-3" key={i}>
-          <Skeleton className="h-48 w-full rounded-xl" />
-          <div className="space-y-2 flex flex-col">
-            <Skeleton className="h-6 w-3/4" />
-            <Skeleton className="h-4 w-full" />
-            <Skeleton className="h-4 w-2/3" />
-          </div>
-        </div>
-      ))}
-    </div>
-  );
-}
