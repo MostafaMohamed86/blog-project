@@ -1,18 +1,23 @@
 import { NextRequest, NextResponse } from "next/server";
-import { authClient } from "@/lib/auth-client"; 
+import { getSessionCookie } from "better-auth/cookies";
 
 export async function middleware(request: NextRequest) {
-    // جلب الجلسة من الكوكيز
-    const sessionCookie = request.cookies.get("better-auth.session_token") || 
-                          request.cookies.get("__secure-better-auth.session_token");
+    // جلب الجلسة باستخدام الدالة الرسمية من المكتبة
+    const session = getSessionCookie(request);
 
-    if (!sessionCookie) {
-        return NextResponse.redirect(new URL("/auth/login", request.url));
+    // التحقق من وجود الجلسة
+    if (!session) {
+        // إذا لم تكن هناك جلسة، قم بالتحويل لصفحة تسجيل الدخول
+        // مع إضافة رابط الصفحة الحالية ليعود إليها المستخدم بعد التسجيل (اختياري)
+        const url = request.nextUrl.clone();
+        url.pathname = "/auth/login";
+        return NextResponse.redirect(url);
     }
 
     return NextResponse.next();
 }
 
 export const config = {
+    // حماية المسارات المطلوبة
     matcher: ["/blog/:path*", "/create/:path*"],
 };
