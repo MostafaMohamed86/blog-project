@@ -27,22 +27,8 @@ export const createPost = mutation({
 export const getPosts = query({
   args: {},
   handler: async (ctx) => {
-    // 1. جلب المستخدم الحالي (يجب تمرير الـ token من الصفحة)
-    const user = await authComponent.safeGetAuthUser(ctx);
-    
-    // إذا لم يكن هناك مستخدم مسجل، نعيد مصفوفة فارغة
-    if (!user) {
-      return [];
-    }
+    const posts = await ctx.db.query("posts").order("desc").collect();
 
-    // 2. جلب المقالات التي تخص هذا المستخدم فقط باستخدام الفلترة
-    const posts = await ctx.db
-      .query("posts")
-      .filter((q) => q.eq(q.field("authorId"), user._id))
-      .order("desc")
-      .collect();
-
-    // 3. معالجة الصور (نفس الكود الخاص بك)
     return await Promise.all(
       posts.map(async (post) => {
         const resolvedImageUrl =
