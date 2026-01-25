@@ -1,11 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getSessionCookie } from "better-auth/cookies";
+import { authClient } from "@/lib/auth-client"; 
 
 export async function middleware(request: NextRequest) {
-    const sessionCookie = getSessionCookie(request);
+    // جلب الجلسة من الكوكيز
+    const sessionCookie = request.cookies.get("better-auth.session_token") || 
+                          request.cookies.get("__secure-better-auth.session_token");
 
     if (!sessionCookie) {
-        // استخدام request.nextUrl يضمن أن التحويل يتم بشكل صحيح في الـ Production
         return NextResponse.redirect(new URL("/auth/login", request.url));
     }
 
@@ -13,6 +14,5 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-    // إضافة :path* تضمن حماية /blog وأي صفحة داخلها مثل /blog/123
-    matcher: ["/blog/:path*", "/create/:path*"], 
+    matcher: ["/blog/:path*", "/create/:path*"],
 };
