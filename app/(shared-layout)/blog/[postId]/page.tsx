@@ -4,7 +4,7 @@ import { CommentSection } from "@/components/web/CommentSection";
 import { PostPresence } from "@/components/web/PostPresence";
 import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
-import { getToken } from "@/lib/auth-server";
+import { getToken, isAuthenticated } from "@/lib/auth-server";
 import { fetchQuery, preloadQuery } from "convex/nextjs";
 import { ArrowLeft } from "lucide-react";
 import { Metadata } from "next";
@@ -25,6 +25,8 @@ export async function generateMetadata({
 
   const post = await fetchQuery(api.posts.getPostById, { postId: postId });
 
+
+
   if (!post) {
     return {
       title: "Post not found",
@@ -42,6 +44,8 @@ export default async function PostIdRoute({ params }: PostIdRouteProps) {
 
   const token = await getToken();
 
+  const auth = await isAuthenticated();
+
   const [post, preloadedComments, userId] = await Promise.all([
     await fetchQuery(api.posts.getPostById, { postId: postId }),
     await preloadQuery(api.comments.getCommentsByPost, {
@@ -50,7 +54,7 @@ export default async function PostIdRoute({ params }: PostIdRouteProps) {
     await fetchQuery(api.presence.getUserId, {}, { token }),
   ]);
 
-  if(!userId) {
+  if(!auth) {
     return redirect("/auth/login");
   }
   if (!post) {
