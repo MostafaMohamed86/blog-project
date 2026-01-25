@@ -1,22 +1,21 @@
 import { NextRequest, NextResponse } from "next/server";
 
 export async function middleware(request: NextRequest) {
-    // جلب كل الكوكيز
-    const cookies = request.cookies.getAll();
-    
-    // البحث عن أي كوكي يخص الجلسة
-    // Better Auth يستخدم أسماء تحتوي على session_token
-    const hasSession = cookies.some(c => c.name.includes("session_token"));
+    // البحث عن الكوكي بالاسم الدقيق الذي وجدناه في متصفحك
+    const sessionToken = request.cookies.get("__Secure-better-auth.session_token") || 
+                         request.cookies.get("better-auth.session_token");
 
-    // إذا لم يجد الجلسة، يحول للوجين
-    if (!hasSession) {
-        const loginUrl = new URL("/auth/login", request.url);
-        return NextResponse.redirect(loginUrl);
+    // التحقق من وجود الكوكي وقيمته
+    if (!sessionToken || !sessionToken.value) {
+        // إذا لم يجد الجلسة، يحول لصفحة تسجيل الدخول
+        return NextResponse.redirect(new URL("/auth/login", request.url));
     }
 
+    // إذا وجد الجلسة، يسمح بالمرور
     return NextResponse.next();
 }
 
 export const config = {
+    // حماية المسارات المطلوبة وكل ما بداخلها
     matcher: ["/blog/:path*", "/create/:path*"],
 };
