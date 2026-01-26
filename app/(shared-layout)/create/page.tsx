@@ -1,6 +1,6 @@
-import CreateForm from "@/components/web/CreateForm";
 import { isAuthenticated } from "@/lib/auth-server";
 import { redirect } from "next/navigation";
+import CreateForm from "./CreateForm";
 
 export default async function CreatePage() {
   const auth = await isAuthenticated();

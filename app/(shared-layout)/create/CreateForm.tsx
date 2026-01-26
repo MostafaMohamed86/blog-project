@@ -24,7 +24,7 @@ import { useTransition } from "react";
 import { Controller, useForm } from "react-hook-form";
 import z from "zod";
 
-export default function CreateRoute() {
+export default function CreateForm() {
   const [isPending, startTransition] = useTransition();
   const form = useForm({
     resolver: zodResolver(postSchema),
