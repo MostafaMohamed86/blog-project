@@ -39,7 +39,7 @@ export default function CreateRoute() {
   function onSubmit(values: z.infer<typeof postSchema>) {
     startTransition(async () => {
       await createBlogAction(values);
-      toast.error("you have to login")
+      toast.error("Please login first")
     });
   }
   return (
