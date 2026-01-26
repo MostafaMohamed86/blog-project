@@ -40,7 +40,7 @@ export default function CreateForm() {
       await createBlogAction(values);
     });
   }
-  
+
   return (
     <div className="py-12">
       <div className="text-center mb-12">
