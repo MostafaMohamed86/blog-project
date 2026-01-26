@@ -1,4 +1,3 @@
-// app/blog/create/page.tsx
 import CreateForm from "@/components/web/CreateForm";
 import { isAuthenticated } from "@/lib/auth-server";
 import { redirect } from "next/navigation";
