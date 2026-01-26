@@ -17,15 +17,18 @@ import {
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { isAuthenticated } from "@/lib/auth-server";
 import { compressImage } from "@/lib/image/compressImage";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2 } from "lucide-react";
+import { redirect } from "next/navigation";
 import { useTransition } from "react";
 import { Controller, useForm } from "react-hook-form";
 import z from "zod";
 
 export default function CreateRoute() {
   const [isPending, startTransition] = useTransition();
+  const auth = isAuthenticated();
   const form = useForm({
     resolver: zodResolver(postSchema),
     defaultValues: {
@@ -39,6 +42,10 @@ export default function CreateRoute() {
     startTransition(async () => {
       await createBlogAction(values);
     });
+  }
+
+  if (!auth) {
+    return redirect("/auth/login");
   }
   return (
     <div className="py-12">
