@@ -44,6 +44,10 @@ export default function LoginPage() {
         password: data.password,
         fetchOptions: {
           onSuccess: () => {
+            form.reset({
+              email: "",
+              password: "",
+            });
             toast.success("Logged in successfully");
             router.push("/");
           },
